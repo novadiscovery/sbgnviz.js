@@ -280,8 +280,18 @@ module.exports = function () {
     // add class information
     nodeObj.class = ele.class_;
     // add label information
-    nodeObj.label = (ele.label && ele.label.text) || undefined;
-    // add state and info box information
+    nodeObj.label = (ele.label && String(ele.label.text)) || undefined;
+    // add custom extensions
+    nodeObj.sbgnExtensions = {};
+    if (ele.extension) {
+      var addToExts = function(err, result) {
+        nodeObj.sbgnExtensions[ext] = result[ext];
+      };
+      for (var ext in ele.extension.list) {
+        parseString(ele.extension.list[ext], addToExts);
+      }
+    }
+
     nodeObj.statesandinfos = self.stateAndInfoProp(ele, nodeObj);
     // adding parent information
     self.addParentInfoToNode(ele, nodeObj, parent, compartments);

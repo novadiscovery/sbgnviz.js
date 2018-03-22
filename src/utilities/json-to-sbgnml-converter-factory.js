@@ -252,7 +252,7 @@ module.exports = function () {
          var collapsedChildren = node.data('collapsedChildren');
          children = children.union(collapsedChildren);
        }
-       children = children.filter("[parent = '"+ node.id() + "']")
+       children = children.filter("[parent = '"+ node.id() + "']");
 
        children.each(function(ele, i){
            if(typeof ele === "number") {
@@ -291,6 +291,17 @@ module.exports = function () {
     if(hasNewtExt) {
        var extension = self.getOrCreateExtension(glyph);
        extension.add("<sbgnviz>"+sbgnvizExtString+"</sbgnviz>");
+    }
+
+    // Add extensions law
+    if(node.data('sbgnExtensions')) {
+      var nodeExtension = self.getOrCreateExtension(glyph);
+      var ext = node.data('sbgnExtensions');
+      var xmlExt = new xml2js.Builder({
+          headless: true,
+          renderOpts: {pretty: false}
+        }).buildObject(ext);
+      nodeExtension.add(xmlExt);
     }
 
     // current glyph is done
